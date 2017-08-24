@@ -1,0 +1,26 @@
+{
+    "name": "drupal/social_auth_heroku",
+    "type": "drupal-module",
+    "description": "Social Auth integration for Heroku.",
+    "keywords": ["Drupal"],
+    "license": "GPL-2.0+",
+    "homepage": "https://www.drupal.org/project/social_auth_heroku",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/social_auth_heroku",
+        "source": "http://cgit.drupalcode.org/social_auth_heroku"
+    },
+    "require": {
+        "stevenmaguire/oauth2-heroku": "^2.0"
+    },
+    "authors": [
+        {
+            "name": "Getulio Valentin Sánchez (gvso)",
+            "email": "valentin2507@gmail.com"
+        },
+        {
+            "name": "Himanshu Dixit (himanshu-dixit)",
+            "email": "hudixt@gmail.com"
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+social_auth_heroku.redirect_to_heroku:
+  path: 'user/login/heroku'
+  defaults:
+    _controller: '\Drupal\social_auth_heroku\Controller\HerokuAuthController::redirectToHeroku'
+  requirements:
+    _role: 'anonymous'
+  options:
+    no_cache: TRUE
+
+social_auth_heroku.callback:
+  path: 'user/login/heroku/callback'
+  defaults:
+    _controller: '\Drupal\social_auth_heroku\Controller\HerokuAuthController::callback'
+  requirements:
+    _role: 'anonymous'
+  options:
+    no_cache: TRUE
+
+social_auth_heroku.settings_form:
+  path: 'admin/config/social-api/social-auth/heroku'
+  defaults:
+    _title: 'Social Auth Heroku settings'
+    _form: '\Drupal\social_auth_heroku\Form\HerokuAuthSettingsForm'
+  requirements:
+    _permission: 'administer social api authentication'
