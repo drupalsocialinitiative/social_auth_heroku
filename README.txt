@@ -9,10 +9,18 @@ CONTENTS OF THIS FILE
  * Support requests
  * Maintainers
 
+
 INTRODUCTION
 ------------
 
-Social Auth Heroku Module is a Heroku Authentication integration for Drupal.
+Social Auth Heroku is a Heroku authentication integration for Drupal. It is
+based on the Social Auth and Social API projects
+
+It adds to the site:
+ * A new url: /user/login/heroku.
+ * A settings form on /admin/config/social-api/social-auth/heroku.
+ * A Heroku logo in the Social Auth Login block.
+
 
 REQUIREMENTS
 ------------
@@ -22,11 +30,12 @@ This module requires the following modules:
  * Social Auth (https://drupal.org/project/social_auth)
  * Social API (https://drupal.org/project/social_api)
 
+
 INSTALLATION
 ------------
 
  * Run composer to install the dependencies.
-   composer require "drupal/social_auth_heroku"
+   composer require "drupal/social_auth_heroku:~2.0"
 
  * Install the dependencies: Social API and Social Auth.
 
@@ -34,13 +43,14 @@ INSTALLATION
    https://drupal.org/documentation/install/modules-themes/modules-8
    for further information.
 
+
 CONFIGURATION
 -------------
 
  * Add your Heroku project OAuth information in
    Configuration » User Authentication » Heroku.
 
- * Place a Social Auth Heroku block in Structure » Block Layout.
+ * Place a Social Auth Login block in Structure » Block Layout.
 
  * If you already have a Social Auth Login block in the site, rebuild the cache.
 
@@ -59,6 +69,7 @@ Drupal site. If we have an existing Drupal user with the same email address
 provided by Heroku, that user is logged in. Otherwise, a new Drupal user is
 created.
 
+
 SUPPORT REQUESTS
 ----------------
 
@@ -73,6 +84,7 @@ https://www.drupal.org/project/issues/social_auth_heroku
 
 When posting a support request, please inform what does the status report say
 at admin/reports/dblog.
+
 
 MAINTAINERS
 -----------

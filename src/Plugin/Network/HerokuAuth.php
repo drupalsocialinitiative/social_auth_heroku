@@ -6,13 +6,13 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\RequestContext;
+use Drupal\Core\Site\Settings;
 use Drupal\social_auth\SocialAuthDataHandler;
 use Drupal\social_api\Plugin\NetworkBase;
 use Drupal\social_api\SocialApiException;
 use Drupal\social_auth_heroku\Settings\HerokuAuthSettings;
+use Stevenmaguire\OAuth2\Client\Provider\Heroku;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use League\OAuth2\Client\Provider\Heroku;
-use Drupal\Core\Site\Settings;
 
 /**
  * Defines a Network Plugin for Social Auth Heroku.
@@ -66,7 +66,7 @@ class HerokuAuth extends NetworkBase implements HerokuAuthInterface {
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
-      $container->get('social_auth.social_auth_data_handler'),
+      $container->get('social_auth.data_handler'),
       $configuration,
       $plugin_id,
       $plugin_definition,
@@ -108,8 +108,7 @@ class HerokuAuth extends NetworkBase implements HerokuAuthInterface {
                               ConfigFactoryInterface $config_factory,
                               LoggerChannelFactoryInterface $logger_factory,
                               RequestContext $requestContext,
-                              Settings $settings
-  ) {
+                              Settings $settings) {
 
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $config_factory);
 
@@ -122,7 +121,7 @@ class HerokuAuth extends NetworkBase implements HerokuAuthInterface {
   /**
    * Sets the underlying SDK library.
    *
-   * @return \League\OAuth2\Client\Provider\Heroku
+   * @return \Stevenmaguire\OAuth2\Client\Provider\Heroku|false
    *   The initialized 3rd party library instance.
    *
    * @throws SocialApiException
@@ -136,28 +135,25 @@ class HerokuAuth extends NetworkBase implements HerokuAuthInterface {
     }
     /* @var \Drupal\social_auth_heroku\Settings\HerokuAuthSettings $settings */
     $settings = $this->settings;
-    // Proxy configuration data for outward proxy.
-    $proxyUrl = $this->siteSettings->get("http_client_config")["proxy"]["http"];
+
     if ($this->validateConfig($settings)) {
+
       // All these settings are mandatory.
+      $league_settings = [
+        'clientId' => $settings->getClientId(),
+        'clientSecret' => $settings->getClientSecret(),
+        'redirectUri' => $this->requestContext->getCompleteBaseUrl() . '/user/login/heroku/callback',
+      ];
+
+      // Proxy configuration data for outward proxy.
+      $proxyUrl = $this->siteSettings->get('http_client_config')['proxy']['http'];
       if ($proxyUrl) {
-        $league_settings = [
-          'clientId' => $settings->getClientId(),
-          'clientSecret' => $settings->getClientSecret(),
-          'redirectUri' => $this->requestContext->getCompleteBaseUrl() . '/user/login/heroku/callback',
-          'proxy' => $proxyUrl,
-        ];
-      }
-      else {
-        $league_settings = [
-          'clientId' => $settings->getClientId(),
-          'clientSecret' => $settings->getClientSecret(),
-          'redirectUri' => $this->requestContext->getCompleteBaseUrl() . '/user/login/heroku/callback',
-        ];
+        $league_settings['proxy'] = $proxyUrl;
       }
 
-      return new \Stevenmaguire\OAuth2\Client\Provider\Heroku($league_settings);
+      return new Heroku($league_settings);
     }
+
     return FALSE;
   }
 

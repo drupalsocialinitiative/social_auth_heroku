@@ -1,9 +1,10 @@
 social_auth_heroku.redirect_to_heroku:
   path: 'user/login/heroku'
   defaults:
-    _controller: '\Drupal\social_auth_heroku\Controller\HerokuAuthController::redirectToHeroku'
+    _controller: '\Drupal\social_auth_heroku\Controller\HerokuAuthController::redirectToProvider'
   requirements:
-    _role: 'anonymous'
+    # Anonymous users can log in, but authenticated users can also associate a new provider.
+    _access: 'TRUE'
   options:
     no_cache: TRUE
 
@@ -12,7 +13,8 @@ social_auth_heroku.callback:
   defaults:
     _controller: '\Drupal\social_auth_heroku\Controller\HerokuAuthController::callback'
   requirements:
-    _role: 'anonymous'
+    # Anonymous users can log in, but authenticated users can also associate a new provider.
+    _access: 'TRUE'
   options:
     no_cache: TRUE
 
