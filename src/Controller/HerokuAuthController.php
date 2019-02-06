@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Returns responses for Simple Heroku Connect module routes.
+ * Returns responses for Social Auth Heroku routes.
  */
 class HerokuAuthController extends OAuth2ControllerBase {
 
