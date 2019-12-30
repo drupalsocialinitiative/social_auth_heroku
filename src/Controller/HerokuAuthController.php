@@ -39,7 +39,9 @@ class HerokuAuthController extends OAuth2ControllerBase {
                               RequestStack $request,
                               SocialAuthDataHandler $data_handler) {
 
-    parent::__construct('Social Auth Heroku', 'social_auth_heroku', $messenger, $network_manager, $user_authenticator, $heroku_manager, $request, $data_handler);
+    parent::__construct('Social Auth Heroku', 'social_auth_heroku',
+                        $messenger, $network_manager, $user_authenticator,
+                        $heroku_manager, $request, $data_handler);
   }
 
   /**
@@ -62,11 +64,11 @@ class HerokuAuthController extends OAuth2ControllerBase {
    * Heroku returns the user here after user has authenticated in Heroku.
    */
   public function callback() {
-    // Checks if authentication failed.
-    if ($this->request->getCurrentRequest()->query->has('error')) {
-      $this->messenger->addError($this->t('You could not be authenticated.'));
 
-      return $this->redirect('user.login');
+    // Checks if there was an authentication error.
+    $redirect = $this->checkAuthError();
+    if ($redirect) {
+      return $redirect;
     }
 
     /* @var \Stevenmaguire\OAuth2\Client\Provider\HerokuResourceOwner|null $profile */
@@ -78,7 +80,12 @@ class HerokuAuthController extends OAuth2ControllerBase {
       // Gets (or not) extra initial data.
       $data = $this->userAuthenticator->checkProviderIsAssociated($profile->getId()) ? NULL : $this->providerManager->getExtraDetails();
 
-      return $this->userAuthenticator->authenticateUser($profile->getName(), $profile->getEmail(), $profile->getId(), $this->providerManager->getAccessToken(), NULL, $data);
+      return $this->userAuthenticator->authenticateUser($profile->getName(),
+                                                        $profile->getEmail(),
+                                                        $profile->getId(),
+                                                        $this->providerManager->getAccessToken(),
+                                                        NULL,
+                                                        $data);
     }
 
     return $this->redirect('user.login');

@@ -33,7 +33,7 @@ class HerokuAuth extends NetworkBase implements HerokuAuthInterface {
    * @return \Stevenmaguire\OAuth2\Client\Provider\Heroku|false
    *   The initialized 3rd party library instance.
    *
-   * @throws SocialApiException
+   * @throws \Drupal\social_api\SocialApiException
    *   If the SDK library does not exist.
    */
   protected function initSdk() {
@@ -42,7 +42,8 @@ class HerokuAuth extends NetworkBase implements HerokuAuthInterface {
     if (!class_exists($class_name)) {
       throw new SocialApiException(sprintf('The Heroku Library for the league oAuth not found. Class: %s.', $class_name));
     }
-    /* @var \Drupal\social_auth_heroku\Settings\HerokuAuthSettings $settings */
+
+    /** @var \Drupal\social_auth_heroku\Settings\HerokuAuthSettings $settings */
     $settings = $this->settings;
 
     if ($this->validateConfig($settings)) {
