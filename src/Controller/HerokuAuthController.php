@@ -71,7 +71,7 @@ class HerokuAuthController extends OAuth2ControllerBase {
       return $redirect;
     }
 
-    /* @var \Stevenmaguire\OAuth2\Client\Provider\HerokuResourceOwner|null $profile */
+    /** @var \Stevenmaguire\OAuth2\Client\Provider\HerokuResourceOwner|null $profile */
     $profile = $this->processCallback();
 
     // If authentication was successful.
