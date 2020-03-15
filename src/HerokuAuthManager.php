@@ -28,8 +28,8 @@ class HerokuAuthManager extends OAuth2Manager {
                               RequestStack $request_stack) {
 
     parent::__construct($config_factory->get('social_auth_heroku.settings'),
-                                             $logger_factory,
-                                             $request_stack->getCurrentRequest());
+                        $logger_factory,
+                        $request_stack->getCurrentRequest());
   }
 
   /**
@@ -37,7 +37,6 @@ class HerokuAuthManager extends OAuth2Manager {
    */
   public function authenticate() {
     try {
-      var_dump($this->request->query->get('code'));
       $this->setAccessToken($this->client->getAccessToken('authorization_code',
         ['code' => $this->request->query->get('code')]));
     }

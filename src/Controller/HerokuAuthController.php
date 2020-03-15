@@ -3,6 +3,7 @@
 namespace Drupal\social_auth_heroku\Controller;
 
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\social_api\Plugin\NetworkManager;
 use Drupal\social_auth\Controller\OAuth2ControllerBase;
 use Drupal\social_auth\SocialAuthDataHandler;
@@ -31,17 +32,20 @@ class HerokuAuthController extends OAuth2ControllerBase {
    *   Used to access GET parameters.
    * @param \Drupal\social_auth\SocialAuthDataHandler $data_handler
    *   The Social Auth data handler.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   Used to handle metadata for redirection to authentication URL.
    */
   public function __construct(MessengerInterface $messenger,
                               NetworkManager $network_manager,
                               UserAuthenticator $user_authenticator,
                               HerokuAuthManager $heroku_manager,
                               RequestStack $request,
-                              SocialAuthDataHandler $data_handler) {
+                              SocialAuthDataHandler $data_handler,
+                              RendererInterface $renderer) {
 
     parent::__construct('Social Auth Heroku', 'social_auth_heroku',
                         $messenger, $network_manager, $user_authenticator,
-                        $heroku_manager, $request, $data_handler);
+                        $heroku_manager, $request, $data_handler, $renderer);
   }
 
   /**
@@ -54,14 +58,15 @@ class HerokuAuthController extends OAuth2ControllerBase {
       $container->get('social_auth.user_authenticator'),
       $container->get('social_auth_heroku.manager'),
       $container->get('request_stack'),
-      $container->get('social_auth.data_handler')
+      $container->get('social_auth.data_handler'),
+      $container->get('renderer')
     );
   }
 
   /**
    * Response for path 'user/login/heroku/callback'.
    *
-   * Heroku returns the user here after user has authenticated in Heroku.
+   * Heroku returns the user here after user has authenticated.
    */
   public function callback() {
 
